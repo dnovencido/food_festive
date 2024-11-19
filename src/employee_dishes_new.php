@@ -37,23 +37,3 @@
         </section>
     </main>
 <?php include "layouts/_footer.php"; ?>
-            <div id="dishes-container">               
-                <?php include "layouts/_account-navigation.php" ?>
-                <div id="dishes">
-                    <h3>Dishes</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Last Updated</th>
-                                <th>Date Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <td colspan="4">No blogs to be displayed...</td>
-                        </tbody>
-                    </table>  
-                </div>
-            </div>
-        </section>

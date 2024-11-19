@@ -43,7 +43,7 @@
                 <?php } ?>
                 <div class="form card">
                     <h1>Log in to your account.</h1>
-                    <form method="post">
+                    <form  method="post">
                         <div class="input-control">
                             <label for="name">Email: </label>
                             <input type="email" name="email" class="input-field input-md" value="<?= $_POST['email'] ?>" />

@@ -18,7 +18,7 @@
         </div>
         <?php if(!empty($_POST['thumbnail'])) { ?>
             <div class="thumbnail">
-                <img src="data:image/jpeg;base64,<?= $_POST['thumbnail'] ?>" alt="" width="500">
+                <img src="data:image/jpeg;base64,<?= $_POST['thumbnail'] ?>" alt="" width="300">
             </div>
         <?php } ?>
         <div class="input-control">
