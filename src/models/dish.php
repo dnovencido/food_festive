@@ -61,8 +61,7 @@
 
     function get_all_dishes($filter = [], $pagination = []) {
         global $conn;
-        $dishes= [];
-       
+
         $query = "SELECT `d`.`id`, `d`.`name` as `name`, `d`.`price`, `d`.`thumbnail`, `u`.`name` as `created_by`, `d`.`created_at`, `d`.`updated_at` 
                 FROM `dishes` as `d` 
                 INNER JOIN `users` as `u` ON `u`.`id` = `d`.`user_id`";
@@ -98,7 +97,6 @@
         
         // Get total number of records
         $count_query = "SELECT COUNT(*) AS total FROM (" . $query . ") AS total_records";
-        $dishes['total'] = 0;
 
         if ($result = $conn->query($count_query)) {
             $row = $result->fetch_assoc();

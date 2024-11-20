@@ -2,7 +2,7 @@
     include "session.php"; 
     include "require_login.php";
     include "models/dish.php";
-
+    include "lib/pagination.php";
    
     if (isset($_GET['page_no'])) {
         $page_no = $_GET['page_no'];
@@ -10,33 +10,16 @@
         $page_no = 1;
     }
 
-    $dishes = [];
-
-    // $total_records_per_page = 1; // defines the number of records (blogs) to be displayed on each page
-    // $offset = ($page_no - 1) * $total_records_per_page; //determine the starting point (index) of records to be fetched
-	// $previous_page = $page_no - 1; // previous page
-	// $next_page = $page_no + 1; // next page
-
-	// $total_records = 2;
-    // $total_no_of_pages = ceil($total_records / $total_records_per_page); // determines the number of pages to be displayed
-
-    // if (isset($_SESSION['id'])) {
-    //     $dishes = get_all_dishes($filter = [], $pagination = ['offset'=> $offset, 'total_records_per_page' => $total_records_per_page]);
-    // }
- 
-    $total_records_per_page = 10; // defines the number of records (blogs) to be displayed on each page
-    $offset = ($page_no - 1) * $total_records_per_page; //determine the starting point (index) of records to be fetched
-	$previous_page = $page_no - 1; // previous page
-	$next_page = $page_no + 1; // next page
+    $offset = get_offset($page_no); // calculate the offset based on the current page number
 
     if (isset($_SESSION['id'])) {
-        $dish = get_all_dishes($filter = [], $pagination = ['offset'=> $offset, 'total_records_per_page' => $total_records_per_page]);
-        $dishes = $dish['result'];
-    }
+        $dish_data = get_all_dishes([], ['offset'=> $offset, 'total_records_per_page' => TOTAL_RECORDS_PER_PAGE]);
+        
+        $dishes = $dish_data['result'] ?? [];
+        $total_records = $dish_data['total'] ?? 0;
 
-	$total_records = $dish['total'];
-    $total_no_of_pages = ceil($total_records / $total_records_per_page); // determines the number of pages to be displayed
-   
+        $pagy = pagination($total_records, $page_no); // setup pagination
+    }
 ?>
 <?php include "layouts/_header.php"; ?>
     <?php include "layouts/_navigation.php"; ?>
@@ -92,10 +75,10 @@
                         <div id="pagination">
                             <ul>
                                 <li class="page-item <?= ($page_no <= 1) ? "disabled" : "" ?>"> 
-                                    <a href="<?= ($page_no > 1) ? '?page_no='.$previous_page : '' ?>" class="page-link">Previous</a>
+                                    <a href="<?= ($page_no > 1) ? '?page_no='.$pagy['previous_page'] : '' ?>" class="page-link">Previous</a>
                                 </li>
                                 <!-- Page numbers -->
-                                <?php for ($counter = 1; $counter <= $total_no_of_pages; $counter++) { ?>
+                                <?php for ($counter = 1; $counter <= $pagy['total_no_of_pages']; $counter++) { ?>
                                     <?php if ($counter == $page_no) { ?>
                                         <li class="page-item"><a class="page-link active"> <?= $counter ?> </a></li>
                                     <?php } else { ?>
@@ -103,11 +86,11 @@
                                     <?php } ?>
                                 <?php } ?>
                                 <!-- Next and last button -->
-                                <?php if($page_no < $total_no_of_pages) { ?>
-                                    <li class="page-item <?= ($page_no >= $total_no_of_pages) ? "disabled" : "" ?>">
-                                        <a href="<?= ($page_no < $total_no_of_pages) ?  "?page_no=".$next_page : ""?>" class="page-link"> Next  &rsaquo;&rsaquo; </a>
+                                <?php if($page_no < $pagy['total_no_of_pages']) { ?>
+                                    <li class="page-item <?= ($page_no >= $pagy['total_no_of_pages']) ? "disabled" : "" ?>">
+                                        <a href="<?= ($page_no < $pagy['total_no_of_pages']) ?  "?page_no=".$pagy['next_page'] : ""?>" class="page-link"> Next  &rsaquo;&rsaquo; </a>
                                     </li>
-                                    <li class="page-item"><a href="?page_no=<?=$total_no_of_pages?>" class="page-link">Last</a></li>
+                                    <li class="page-item"><a href="?page_no=<?=$pagy['total_no_of_pages']?>" class="page-link">Last</a></li>
                                 <?php } ?>
                             </ul>
                         </div>
